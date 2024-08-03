@@ -4,11 +4,15 @@
 @tailwind utilities;
 
 /* custom class  */
+body {
+  font-family: "Poppins", sans-serif;
+}
 h1 h2 h3 {
   color: #152a16;
 }
 p {
   color: #5c635a;
+  font-size: 1rem;
 }
 
 .main_ {
