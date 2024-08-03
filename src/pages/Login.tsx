@@ -1,9 +1,14 @@
+import Form from "../components/Form";
+import { FormTypes } from "../constant/type";
+
 const Login = () => {
   return (
     <div className="main_  flex justify-between items-center flex-col-reverse lg:flex-row ">
       {/* left box  */}
       <div className="basis-[50%]">
-        <img className="" src="../../public/logo.png" alt="" />
+        <div className="flex justify-center lg:justify-start">
+          <img className="  " src="../../public/logo.png" alt="" />
+        </div>
         <div>
           <h2 className="text_black_pri lg:text-3xl text-[28px] text-center lg:text-start font-semibold">
             Sign In To Your Account
@@ -17,6 +22,7 @@ const Login = () => {
           </p>
         </div>
         {/* form  */}
+        <Form type={FormTypes.SignUp} />
       </div>
       {/* right box  */}
       <div className="basis-[50%]">right box</div>
