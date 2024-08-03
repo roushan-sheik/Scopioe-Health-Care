@@ -13,7 +13,7 @@ import React, { ReactNode } from "react";
 import auth from "../firebase/firebase";
 
 // Define the UserInfo type
-interface UserInfo {
+export type UserInfoTypes = {
   user: FirebaseUser | null;
   loading: boolean;
   createUser: (email: string, password: string) => Promise<any>;
@@ -21,7 +21,7 @@ interface UserInfo {
   signInWithGoogle: () => Promise<any>;
   logoutUser: () => Promise<void>;
   updateUserProfile: (name: string, photo: string) => Promise<void>;
-}
+};
 
 // props types
 interface AuthProviderProps {
@@ -29,7 +29,7 @@ interface AuthProviderProps {
 }
 
 // Create context with a default value of null
-export const authContext = React.createContext<UserInfo | null>(null);
+export const authContext = React.createContext<UserInfoTypes | null>(null);
 
 const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const [user, setUser] = React.useState<FirebaseUser | null>(null);
@@ -93,7 +93,7 @@ const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   }, []);
 
   // authentication user info data
-  const userInfo: UserInfo = {
+  const userInfo: UserInfoTypes = {
     user,
     loading,
     createUser,
