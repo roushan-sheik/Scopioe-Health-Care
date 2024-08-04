@@ -5,18 +5,35 @@ import { FormTypes } from "../constant/type";
 
 const Form = ({ type }: { type: string }) => {
   const [shoPassword, setShowPassword] = React.useState(false);
+  const [error, setError] = React.useState("");
   const [showConfirmPassword, setShowConfirmPassword] = React.useState(false);
-  // form handeling
+  // form handling
+
   const [user, setUser] = React.useState({
     name: "",
     email: "",
     password: "",
+    condition: false,
   });
+
   function handleChange(e: any) {
-    setUser({ ...user, [e.target.name]: e.target.value });
+    const { name, value, type, checked } = e.target;
+    setUser((prevUser) => ({
+      ...prevUser,
+      [name]: type === "checkbox" ? checked : value,
+    }));
   }
+
   // confirm password check
-  function handleConfirmPassword() {}
+  function handleConfirmPassword(event: any) {
+    const confirmPass = event.target.value;
+    setError("");
+    if (!(confirmPass === user.password)) {
+      setError("Password dose not match");
+      return;
+    }
+  }
+
   // handle the form
   function handleSubmit(event: any) {
     event.preventDefault();
@@ -25,13 +42,13 @@ const Form = ({ type }: { type: string }) => {
 
   return (
     <form onSubmit={handleSubmit} className="mt-6">
-      {/* name  */}
+      {/* name */}
       {type === FormTypes.SignUp && (
         <div>
           <label className="font-medium" htmlFor="name">
             Name
           </label>
-          <div className="border p-4  border-[#E7E7E7] rounded-[10px]">
+          <div className="border p-4 border-[#E7E7E7] rounded-[10px]">
             <input
               type="text"
               className="focus:outline-none"
@@ -42,12 +59,12 @@ const Form = ({ type }: { type: string }) => {
           </div>
         </div>
       )}
-      {/* Email  */}
+      {/* Email */}
       <div className="mt-4">
         <label className="font-medium" htmlFor="email">
           Email
         </label>
-        <div className="border p-4  border-[#E7E7E7] rounded-[10px]">
+        <div className="border p-4 border-[#E7E7E7] rounded-[10px]">
           <input
             type="email"
             className="focus:outline-none"
@@ -57,12 +74,12 @@ const Form = ({ type }: { type: string }) => {
           />
         </div>
       </div>
-      {/* Password  */}
+      {/* Password */}
       <div className="mt-4">
         <label className="font-medium" htmlFor="password">
           Password
         </label>
-        <div className="border p-4  flex items-center justify-between border-[#E7E7E7] rounded-[10px]">
+        <div className="border p-4 flex items-center justify-between border-[#E7E7E7] rounded-[10px]">
           <input
             type={shoPassword ? "text" : "password"}
             className="focus:outline-none"
@@ -78,13 +95,13 @@ const Form = ({ type }: { type: string }) => {
           </p>
         </div>
       </div>
-      {/* confirm Password   */}
+      {/* confirm Password */}
       {type === FormTypes.SignUp && (
         <div className="mt-4">
           <label className="font-medium" htmlFor="password">
             Confirm Password
           </label>
-          <div className="border p-4  flex items-center justify-between border-[#E7E7E7] rounded-[10px]">
+          <div className="border p-4 flex items-center justify-between border-[#E7E7E7] rounded-[10px]">
             <input
               type={showConfirmPassword ? "text" : "password"}
               className="focus:outline-none"
@@ -99,13 +116,25 @@ const Form = ({ type }: { type: string }) => {
               {showConfirmPassword ? <FiEyeOff /> : <FiEye />}
             </p>
           </div>
+          {error && <p className=" text-red-500">{error}</p>}
         </div>
       )}
-      {/* check box and remember me  */}
-      <div className="mt-4 flex justify-between items-center">
-        <div className="flex items-center gap-3">
-          <input type="checkbox" name="" id="" />
-          <p>Remember me</p>
+      {/* check box and remember me */}
+      <div className="mt-3 flex justify-between items-center">
+        <div className="flex mt-2 items-center gap-3">
+          <input
+            className="text_brand "
+            id="condition"
+            type="checkbox"
+            name={"condition"}
+            checked={user.condition}
+            onChange={handleChange}
+          />
+          <label htmlFor="condition" className="text_brand">
+            {type === FormTypes.SignIn
+              ? "Remember me"
+              : "Accept Terms of Service"}
+          </label>
         </div>
         <div>
           {type === FormTypes.SignUp && (
@@ -115,10 +144,15 @@ const Form = ({ type }: { type: string }) => {
           )}
         </div>
       </div>
-      {/* submit button  */}
-      <button type="submit">
-        {type === FormTypes.SignUp ? "Sign up" : "Sign in"}
-      </button>
+      {/* submit button */}
+      <div className="flex justify-center mt-8">
+        <button
+          type="submit"
+          className="rounded-lg  w-[271px] bg_brand px-8 py-3 text-xl text-white duration-300 active:scale-95"
+        >
+          {type === FormTypes.SignIn ? "Sign in" : "Sign up"}
+        </button>
+      </div>
     </form>
   );
 };

@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import Form from "../components/Form";
 import { FormTypes } from "../constant/type";
 
@@ -22,7 +23,14 @@ const Login = () => {
           </p>
         </div>
         {/* form  */}
-        <Form type={FormTypes.SignUp} />
+        <Form type={FormTypes.SignIn} />
+
+        <div className="flex items-center gap-1 font-medium justify-center mt-4">
+          <p>Already Have an Account?</p>
+          <Link className="text_brand" to={"/register"}>
+            Register
+          </Link>
+        </div>
       </div>
       {/* right box  */}
       <div className="basis-[50%]">right box</div>
