@@ -1,48 +1,73 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import React from "react";
+import React, { ChangeEvent, FormEvent } from "react";
 import { FiEye, FiEyeOff } from "react-icons/fi";
 import { FormTypes } from "../constant/type";
 
-const Form = ({ type }: { type: string }) => {
+type User = {
+  name: string;
+  email: string;
+  password: string;
+  condition: boolean;
+};
+type LoginUser = {
+  email: string;
+  password: string;
+  condition: boolean;
+};
+
+type FormProps = {
+  type: string;
+  getUserInput: (user: User | LoginUser) => void; // Define the type for the getUserInput function
+};
+
+const Form: React.FC<FormProps> = ({ type, getUserInput }) => {
   const [shoPassword, setShowPassword] = React.useState(false);
   const [error, setError] = React.useState("");
   const [showConfirmPassword, setShowConfirmPassword] = React.useState(false);
-  // form handling
 
-  const [user, setUser] = React.useState({
+  const [loginUser, setLoginUser] = React.useState<LoginUser>({
+    email: "",
+    password: "",
+    condition: false,
+  });
+  const [user, setUser] = React.useState<User>({
     name: "",
     email: "",
     password: "",
     condition: false,
   });
 
-  function handleChange(e: any) {
+  function handleChange(e: ChangeEvent<HTMLInputElement>) {
     const { name, value, type, checked } = e.target;
+    setLoginUser((prevUser) => ({
+      ...prevUser,
+      [name]: type === "checkbox" ? checked : value,
+    }));
     setUser((prevUser) => ({
       ...prevUser,
       [name]: type === "checkbox" ? checked : value,
     }));
   }
 
-  // confirm password check
-  function handleConfirmPassword(event: any) {
-    const confirmPass = event.target.value;
+  function handleConfirmPassword(e: ChangeEvent<HTMLInputElement>) {
+    const confirmPass = e.target.value;
     setError("");
-    if (!(confirmPass === user.password)) {
-      setError("Password dose not match");
-      return;
+    if (confirmPass !== user.password) {
+      setError("Password does not match");
     }
   }
 
-  // handle the form
-  function handleSubmit(event: any) {
+  function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    console.log(user);
+    if (type === FormTypes.SignIn) {
+      getUserInput(loginUser); // Pass user data to the getUserInput function
+    } else {
+      getUserInput(user); // Pass user data to the getUserInput function
+    }
   }
 
   return (
     <form onSubmit={handleSubmit} className="mt-6">
-      {/* name */}
       {type === FormTypes.SignUp && (
         <div>
           <label className="font-medium" htmlFor="name">
@@ -59,7 +84,6 @@ const Form = ({ type }: { type: string }) => {
           </div>
         </div>
       )}
-      {/* Email */}
       <div className="mt-4">
         <label className="font-medium" htmlFor="email">
           Email
@@ -74,7 +98,6 @@ const Form = ({ type }: { type: string }) => {
           />
         </div>
       </div>
-      {/* Password */}
       <div className="mt-4">
         <label className="font-medium" htmlFor="password">
           Password
@@ -95,7 +118,6 @@ const Form = ({ type }: { type: string }) => {
           </p>
         </div>
       </div>
-      {/* confirm Password */}
       {type === FormTypes.SignUp && (
         <div className="mt-4">
           <label className="font-medium" htmlFor="password">
@@ -119,14 +141,13 @@ const Form = ({ type }: { type: string }) => {
           {error && <p className=" text-red-500">{error}</p>}
         </div>
       )}
-      {/* check box and remember me */}
       <div className="mt-3 flex justify-between items-center">
         <div className="flex mt-2 items-center gap-3">
           <input
-            className="text_brand "
+            className="text_brand"
             id="condition"
             type="checkbox"
-            name={"condition"}
+            name="condition"
             checked={user.condition}
             onChange={handleChange}
           />
@@ -144,11 +165,10 @@ const Form = ({ type }: { type: string }) => {
           )}
         </div>
       </div>
-      {/* submit button */}
       <div className="flex justify-center mt-8">
         <button
           type="submit"
-          className="rounded-lg  w-[271px] bg_brand px-8 py-3 text-xl text-white duration-300 active:scale-95"
+          className="rounded-lg w-[271px] bg_brand px-8 py-3 text-xl text-white duration-300 active:scale-95"
         >
           {type === FormTypes.SignIn ? "Sign in" : "Sign up"}
         </button>

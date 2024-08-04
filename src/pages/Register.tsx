@@ -2,7 +2,21 @@ import { Link } from "react-router-dom";
 import Form from "../components/Form";
 import { FormTypes } from "../constant/type";
 
-const Login = () => {
+const Register = () => {
+  type User = {
+    name: string;
+    email: string;
+    password: string;
+    condition: boolean;
+  };
+  type LoginUser = {
+    email: string;
+    password: string;
+    condition: boolean;
+  };
+  const getUserInput = (user: User | LoginUser) => {
+    console.log(user);
+  };
   return (
     <div className="main_  flex justify-between items-center flex-col-reverse lg:flex-row ">
       {/* left box  */}
@@ -23,7 +37,7 @@ const Login = () => {
           </p>
         </div>
         {/* form  */}
-        <Form type={FormTypes.SignUp} />
+        <Form type={FormTypes.SignUp} getUserInput={getUserInput} />
 
         <div className="flex items-center gap-1 font-medium justify-center mt-4">
           <p>Already Have an Account?</p>
@@ -38,4 +52,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default Register;
